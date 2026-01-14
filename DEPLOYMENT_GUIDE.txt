@@ -1,0 +1,340 @@
+===========================================
+COMPLETE DEPLOYMENT GUIDE
+Portfolio Website - Step by Step
+===========================================
+
+PART 1: GOOGLE APPS SCRIPT SETUP
+==================================
+
+STEP 1: Create/Open Google Apps Script
+---------------------------------------
+1. Go to: https://script.google.com/
+2. Click "New Project" (or open existing script)
+3. Delete any existing code
+4. Copy ALL code from: GOOGLE_APPS_SCRIPT_FIXED.js
+5. Paste into the editor
+
+STEP 2: Connect Script to Your Sheet
+-------------------------------------
+Option A: Script is in the same spreadsheet
+- If you created script from Google Sheet (Extensions → Apps Script)
+- Skip to Step 3
+
+Option B: Script is standalone
+- Select function: "connectToSheet"
+- Click "Run" ▶️
+- Allow permissions when prompted
+- Should show: "Connected to sheet!"
+
+STEP 3: Test Connection
+------------------------
+1. Select function: "testConnection"
+2. Click "Run" ▶️
+3. Check result:
+   ✅ SUCCESS = Everything connected correctly
+   ❌ ERROR = Fix the error message
+
+STEP 4: Deploy as Web App (CRITICAL!)
+--------------------------------------
+1. Click "Deploy" → "New deployment"
+   (or "Manage deployments" → "New deployment")
+
+2. Click gear icon ⚙️ → Select "Web app"
+
+3. Deployment settings:
+   - Description: "Contact Form Handler" (optional)
+   - Execute as: "Me" (your email)
+   - Who has access: "Anyone" ⚠️ MUST BE "ANYONE"
+   - Click "Deploy"
+
+4. Authorize access:
+   - Click "Authorize access"
+   - Choose your Google account
+   - Click "Advanced" → "Go to [Project Name] (unsafe)"
+   - Click "Allow"
+
+5. Copy the Web App URL:
+   - It looks like: https://script.google.com/macros/s/AKfyc.../exec
+   - ⚠️ IMPORTANT: Copy this URL - you'll need it!
+
+STEP 5: Update HTML with Script URL
+-------------------------------------
+1. Open: index.html
+2. Find line 1311:
+   const scriptURL = 'https://script.google.com/macros/s/...'
+3. Replace the URL with your NEW Web App URL from Step 4
+4. Save the file
+
+STEP 6: Test Contact Form
+--------------------------
+1. Open your website (locally or deployed)
+2. Fill out contact form
+3. Submit
+4. Check your Google Sheet:
+   https://docs.google.com/spreadsheets/d/1bS0kBJrsN8k8EA6HqZKqNoe9gozXoXxtWzmMMQ-Yavs/edit
+5. Data should appear in a new row!
+
+
+PART 2: NETLIFY DEPLOYMENT (For Testimonials)
+==============================================
+
+STEP 1: Prepare Netlify Functions
+---------------------------------
+1. Make sure you have these files:
+   - netlify/functions/get-testimonials.js
+   - netlify/functions/submit-testimonial.js
+   - netlify.toml
+   - package.json
+
+STEP 2: Set Up Neon Database
+-----------------------------
+1. Go to: https://neon.tech/
+2. Sign up/Login
+3. Create a new project
+4. Copy your connection string
+5. Run the SQL from: database-schema.sql
+   (Creates the testimonials table)
+
+STEP 3: Configure Netlify Environment Variables
+------------------------------------------------
+1. Go to your Netlify site dashboard
+2. Site settings → Environment variables
+3. Add this variable:
+   - Variable name: NETLIFY_DATABASE_URL
+   - Value: (your Neon connection string)
+   - Example: postgresql://user:password@host/database?sslmode=require
+   - Note: Functions also accept DATABASE_URL, but NETLIFY_DATABASE_URL is preferred
+
+STEP 4: Deploy to Netlify
+--------------------------
+Option A: Deploy via Git (Recommended)
+1. Push your code to GitHub:
+   git add .
+   git commit -m "Deploy portfolio to Netlify"
+   git push origin main
+
+2. Go to: https://app.netlify.com/
+3. Click "Add new site" → "Import an existing project"
+4. Connect your GitHub account
+5. Select your repository
+6. Configure build settings:
+   - Build command: (leave empty - static site)
+   - Publish directory: . (root directory)
+7. Click "Deploy site"
+8. Netlify will automatically detect:
+   - Functions from netlify/functions/
+   - Redirects from netlify.toml
+   - Dependencies from package.json
+
+Option B: Deploy via Netlify Dashboard (Manual)
+1. Go to: https://app.netlify.com/
+2. Click "Add new site" → "Deploy manually"
+3. Drag and drop your project folder (or zip file)
+4. Wait for deployment
+
+STEP 5: Verify Deployment
+--------------------------
+1. Visit your deployed site
+2. Test testimonials section
+3. Submit a testimonial
+4. Check if it appears (after approval in database)
+
+
+PART 3: LOCAL DEVELOPMENT SETUP
+===============================
+
+For Testing Locally with Netlify Dev:
+--------------------------------------
+1. Install dependencies:
+   npm install
+
+2. Create .env file in root directory:
+   NETLIFY_DATABASE_URL=your_neon_connection_string_here
+
+3. Run Netlify Dev server:
+   npm run dev
+
+4. Open browser: http://localhost:8888
+
+5. Test all features:
+   - Contact form (Google Apps Script)
+   - Testimonials section (loads from database via /api/get-testimonials)
+   - Submit testimonial (saves to database via /api/submit-testimonial)
+
+Note: The /api/ paths work both locally (with netlify dev) and in production!
+
+Files Needed:
+-------------
+✅ index.html
+✅ style.css
+✅ images/ folder
+✅ GOOGLE_APPS_SCRIPT_FIXED.js (for reference)
+✅ netlify/functions/ (for testimonials)
+   - get-testimonials.js
+   - submit-testimonial.js
+✅ netlify.toml (configured with redirects and headers)
+✅ package.json (with dependencies)
+✅ package-lock.json (locked dependencies)
+
+
+PART 4: TROUBLESHOOTING
+========================
+
+Contact Form Not Saving Data:
+-----------------------------
+1. Check Google Apps Script → Executions tab
+2. Look for error messages
+3. Verify "Who has access" is set to "Anyone"
+4. Check sheet column headers match exactly:
+   Timestamp, Name, Email, Phone, Message
+5. Run testConnection() function again
+
+403 Forbidden Error:
+--------------------
+- Script not deployed correctly
+- "Who has access" is "Only myself" (should be "Anyone")
+- Fix: Redeploy with correct permissions
+
+Testimonials Not Working:
+--------------------------
+- Check environment variables are set (NETLIFY_DATABASE_URL in Netlify)
+- Verify Neon database connection string is correct
+- Check Netlify function logs (Site → Functions → Logs)
+- Verify database schema is executed (run database-schema.sql)
+- Check browser console (F12) for API errors
+- Ensure /api/ paths are accessible (check netlify.toml redirects)
+
+CORS Errors:
+------------
+- Already handled with mode: 'no-cors'
+- If still seeing errors, check script deployment
+
+
+PART 5: QUICK CHECKLIST
+========================
+
+Before Deployment:
+------------------
+[ ] Google Apps Script code copied
+[ ] Script connected to sheet (run connectToSheet or initialSetup)
+[ ] testConnection() shows SUCCESS
+[ ] Script deployed as Web App
+[ ] "Who has access" set to "Anyone"
+[ ] Web App URL copied
+[ ] scriptURL updated in index.html
+
+For Netlify (Testimonials):
+----------------------------
+[ ] Neon database created
+[ ] Database schema executed (database-schema.sql)
+[ ] NETLIFY_DATABASE_URL environment variable set in Netlify
+[ ] netlify.toml file present and configured
+[ ] package.json file present with dependencies
+[ ] package-lock.json committed to git
+[ ] Functions in netlify/functions/ directory
+[ ] API endpoints use /api/ paths in HTML
+[ ] Functions deployed and accessible
+
+After Deployment:
+------------------
+[ ] Contact form submits successfully
+[ ] Data appears in Google Sheet
+[ ] Testimonials load (if deployed to Netlify)
+[ ] No console errors
+[ ] All sections working
+
+
+PART 6: YOUR SPECIFIC SETTINGS
+================================
+
+Google Sheet:
+-------------
+URL: https://docs.google.com/spreadsheets/d/1bS0kBJrsN8k8EA6HqZKqNoe9gozXoXxtWzmMMQ-Yavs/edit
+Sheet ID: 1bS0kBJrsN8k8EA6HqZKqNoe9gozXoXxtWzmMMQ-Yavs
+Sheet Name: Sheet1 (check if different)
+Columns: Timestamp, Name, Email, Phone, Message
+
+Script URL Location:
+--------------------
+File: index.html
+Line: 1311
+Variable: const scriptURL = 'YOUR_URL_HERE'
+
+
+PART 7: TESTING CHECKLIST
+==========================
+
+Test Contact Form:
+------------------
+1. Fill all fields (Name, Email, Phone, Message)
+2. Submit form
+3. Check for success message
+4. Open Google Sheet
+5. Verify new row with data
+
+Test Testimonials:
+-------------------
+1. View testimonials section (should load from database)
+2. Check browser console (F12) → Network tab → Look for /api/get-testimonials
+3. Verify testimonials display (only approved ones show)
+4. Submit a testimonial via form
+5. Check response (should show success message)
+6. Note: New testimonials need approval in database before appearing
+7. Verify database connection is working
+
+Test All Sections:
+------------------
+- Home section loads
+- Navigation works
+- About section displays
+- Skills bars animate
+- Portfolio shows projects
+- Certifications display
+- Blog section works
+- Contact form submits
+
+
+===========================================
+IMPORTANT NOTES
+===========================================
+
+1. Google Apps Script URL changes when you redeploy
+   → Always update index.html with new URL (around line 1311)
+
+2. Netlify functions work locally with "npm run dev"
+   → Testimonials work locally via /api/ paths when using netlify dev
+   → Make sure .env file is set up with NETLIFY_DATABASE_URL
+   → API endpoints: /api/get-testimonials and /api/submit-testimonial
+
+3. Environment Variables:
+   → Use NETLIFY_DATABASE_URL in Netlify dashboard (preferred)
+   → Functions also accept DATABASE_URL as fallback
+   → .env file is for local development only (not committed to git)
+
+4. Contact form shows "Success" even if data doesn't save
+   → Always check Google Sheet to verify data was saved
+
+5. 403 Error = Deployment permissions wrong
+   → Set "Who has access" to "Anyone" in Google Apps Script
+
+6. Test locally first, then deploy
+   → Use "npm run dev" to test functions locally
+   → Fix issues before deploying to production
+
+7. API Endpoints:
+   → GET /api/get-testimonials - Fetches approved testimonials
+   → POST /api/submit-testimonial - Submits new testimonial
+   → Both work locally (netlify dev) and in production
+
+===========================================
+SUPPORT
+===========================================
+
+If something doesn't work:
+1. Check Google Apps Script → Executions tab
+2. Check Netlify → Functions → Logs
+3. Check browser console for errors
+4. Verify all settings match this guide
+
+Good luck with your deployment! 🚀
+
