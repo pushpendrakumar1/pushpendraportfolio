@@ -1137,6 +1137,18 @@ nav ul .fa-circle-xmark {
     font-weight: 500;
 }
 
+.company-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 10px 0 20px 0;
+    padding: 15px;
+    background: rgba(255, 0, 79, 0.05);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 5px;
+    font-style: italic;
+}
+
 .timeline-details {
     list-style: none;
     padding: 0;
@@ -2807,5 +2819,371 @@ nav ul .fa-circle-xmark {
         top: -40px;
         font-size: 11px;
         padding: 6px 12px;
+    }
+}
+
+/* ==================== ACHIEVEMENTS & TOOLS SECTION ==================== */
+#achievements {
+    padding: 100px 0;
+    background: linear-gradient(135deg, rgba(255, 0, 79, 0.05) 0%, rgba(26, 26, 26, 1) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+#achievements::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(255, 0, 79, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.achievements-intro {
+    max-width: 900px;
+    margin: 0 auto 60px;
+    text-align: center;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.achievements-intro p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.achievements-intro strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.tool-category {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.tool-category:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(255, 0, 79, 0.2);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 0, 79, 0.3);
+}
+
+.category-header i {
+    font-size: 32px;
+    color: var(--primary-color);
+}
+
+.category-header h3 {
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.tools-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+.tool-item {
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-color);
+    transform: scaleY(0);
+    transition: var(--transition);
+}
+
+.tool-item:hover {
+    background: rgba(255, 0, 79, 0.08);
+    border-color: var(--primary-color);
+    transform: translateX(10px);
+}
+
+.tool-item:hover::before {
+    transform: scaleY(1);
+}
+
+.tool-item.featured-tool {
+    background: linear-gradient(135deg, rgba(255, 0, 79, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+    border: 2px solid var(--primary-color);
+}
+
+.tool-item.featured-tool::before {
+    width: 6px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+}
+
+.tool-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255, 0, 79, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 0, 79, 0.3);
+}
+
+.tool-icon i {
+    font-size: 28px;
+    color: var(--primary-color);
+}
+
+.tool-content {
+    flex: 1;
+}
+
+.tool-content h4 {
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.featured-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 10px;
+}
+
+.tool-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 15px 0;
+    font-size: 14px;
+}
+
+.tool-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.tool-features span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: rgba(255, 0, 79, 0.1);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 0, 79, 0.2);
+}
+
+.tool-features span i {
+    color: var(--primary-color);
+    font-size: 10px;
+}
+
+.tool-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.tool-tech span {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.tool-item:hover .tool-tech span {
+    background: rgba(255, 0, 79, 0.15);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.achievements-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(255, 0, 79, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 0, 79, 0.3);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 0, 79, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.stat-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(255, 0, 79, 0.3);
+    border-color: var(--primary-color);
+}
+
+.stat-box:hover::before {
+    opacity: 1;
+}
+
+.stat-box .stat-number {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-box .stat-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Achievements Section */
+@media (max-width: 768px) {
+    #achievements {
+        padding: 60px 0;
+    }
+    
+    .achievements-intro {
+        padding: 20px;
+        margin-bottom: 40px;
+    }
+    
+    .tool-category {
+        padding: 25px;
+    }
+    
+    .category-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .category-header h3 {
+        font-size: 20px;
+    }
+    
+    .tool-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tool-icon {
+        margin: 0 auto;
+    }
+    
+    .tool-content h4 {
+        justify-content: center;
+    }
+    
+    .tool-features {
+        justify-content: center;
+    }
+    
+    .tool-tech {
+        justify-content: center;
+    }
+    
+    .achievements-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .stat-box {
+        padding: 30px 15px;
+    }
+    
+    .stat-box .stat-number {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .achievements-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .tool-item {
+        padding: 20px;
     }
 }
