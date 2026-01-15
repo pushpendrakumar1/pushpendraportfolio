@@ -1607,21 +1607,36 @@ nav ul .fa-circle-xmark {
 
 .rating-group {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 15px;
     margin-bottom: 25px;
 }
 
-.rating-group label {
+.rating-group > label {
     color: var(--text-primary);
     font-weight: 600;
     margin: 0;
+    font-size: 16px;
+}
+
+.rating-group > label #ratingValue {
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.rating-group > label .rating-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .star-rating {
     display: flex;
-    flex-direction: row-reverse;
-    gap: 5px;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .star-rating input[type="radio"] {
@@ -1629,24 +1644,48 @@ nav ul .fa-circle-xmark {
 }
 
 .star-rating label {
-    font-size: 24px;
-    color: rgba(255, 255, 255, 0.3);
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.2);
     cursor: pointer;
     transition: var(--transition);
     margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
 }
 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #ffd700;
+.star-rating label i {
+    display: block;
+    transition: all 0.2s ease;
+    line-height: 1;
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.2);
 }
 
-.star-rating input[type="radio"]:checked ~ label {
-    color: #ffd700;
+/* Hover effect - highlight stars up to the hovered star (using JavaScript for better control) */
+.star-rating label:hover {
+    transform: scale(1.05);
 }
 
-.star-rating input[type="radio"]:checked + label ~ label {
+/* Selected stars will be highlighted via JavaScript */
+.star-rating input[type="radio"]:checked + label i {
     color: #ffd700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+}
+
+/* Active state for better feedback */
+.star-rating label:active {
+    transform: scale(0.95);
+}
+
+.star-rating label:active i {
+    transform: scale(0.9);
 }
 
 #testimonialFormMsg {
@@ -1812,49 +1851,7 @@ nav ul .fa-circle-xmark {
     gap: 20px;
 }
 
-.rating-group {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.rating-group label {
-    color: var(--text-primary);
-    font-weight: 600;
-    margin: 0;
-}
-
-.star-rating {
-    display: flex;
-    flex-direction: row-reverse;
-    gap: 5px;
-}
-
-.star-rating input[type="radio"] {
-    display: none;
-}
-
-.star-rating label {
-    font-size: 24px;
-    color: rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    transition: var(--transition);
-    margin: 0;
-}
-
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #ffd700;
-}
-
-.star-rating input[type="radio"]:checked ~ label {
-    color: #ffd700;
-}
-
-.star-rating input[type="radio"]:checked + label ~ label {
-    color: #ffd700;
-}
+/* Duplicate rating styles removed - using main styles defined earlier */
 
 #testimonialFormMsg {
     margin-top: 20px;
