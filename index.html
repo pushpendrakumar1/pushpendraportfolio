@@ -631,18 +631,18 @@
                                 <i class="fa-solid fa-message"></i>
                             </div>
                             <div class="form-group rating-group">
-                                <label>Rating:</label>
+                                <label>Your Rating: <span id="ratingValue">Select rating</span></label>
                                 <div class="star-rating">
-                                    <input type="radio" id="star5" name="rating" value="5" checked>
-                                    <label for="star5"><i class="fa-solid fa-star"></i></label>
-                                    <input type="radio" id="star4" name="rating" value="4">
-                                    <label for="star4"><i class="fa-solid fa-star"></i></label>
-                                    <input type="radio" id="star3" name="rating" value="3">
-                                    <label for="star3"><i class="fa-solid fa-star"></i></label>
-                                    <input type="radio" id="star2" name="rating" value="2">
-                                    <label for="star2"><i class="fa-solid fa-star"></i></label>
                                     <input type="radio" id="star1" name="rating" value="1">
-                                    <label for="star1"><i class="fa-solid fa-star"></i></label>
+                                    <label for="star1" data-rating="1"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2" data-rating="2"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <label for="star3" data-rating="3"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4" data-rating="4"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star5" name="rating" value="5">
+                                    <label for="star5" data-rating="5"><i class="fa-solid fa-star"></i></label>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn2">
@@ -1217,13 +1217,21 @@
                     const msgDiv = document.getElementById('testimonialFormMsg');
                     const originalText = submitBtn.innerHTML;
                     
+                    // Check if rating is selected
+                    const selectedRating = testimonialForm.querySelector('input[name="rating"]:checked');
+                    if (!selectedRating) {
+                        msgDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle"></i> Please select a rating.';
+                        msgDiv.style.color = '#ff004f';
+                        return;
+                    }
+                    
                     // Get form data
                     const formData = {
                         name: document.getElementById('testimonialName').value.trim(),
                         position: document.getElementById('testimonialPosition').value.trim(),
                         company: document.getElementById('testimonialCompany').value.trim(),
                         message: document.getElementById('testimonialMessage').value.trim(),
-                        rating: testimonialForm.querySelector('input[name="rating"]:checked').value
+                        rating: selectedRating.value
                     };
                     
                     // Validation
@@ -1287,8 +1295,21 @@
                             msgDiv.innerHTML = '<i class="fa-solid fa-check-circle"></i> ' + data.message;
                             msgDiv.style.color = '#61b752';
                             testimonialForm.reset();
-                            // Reset star rating to 5
-                            document.getElementById('star5').checked = true;
+                            
+                            // Reset star rating display and visual state
+                            const ratingValue = document.getElementById('ratingValue');
+                            if (ratingValue) {
+                                ratingValue.textContent = 'Select rating';
+                            }
+                            
+                            // Reset all stars to dimmed state
+                            const starLabels = document.querySelectorAll('.star-rating label');
+                            starLabels.forEach((label) => {
+                                const starIcon = label.querySelector('i');
+                                starIcon.style.color = 'rgba(255, 255, 255, 0.2)';
+                                starIcon.style.textShadow = 'none';
+                                starIcon.style.transform = 'scale(1)';
+                            });
                             
                             // Refresh testimonials after a delay
                             setTimeout(() => {
@@ -1323,7 +1344,80 @@
             // Initialize testimonials on page load
             window.addEventListener('load', function() {
                 fetchTestimonials();
+                initializeStarRating();
             });
+
+            // Star Rating Interactive Functionality
+            function initializeStarRating() {
+                const starInputs = document.querySelectorAll('.star-rating input[type="radio"]');
+                const starLabels = document.querySelectorAll('.star-rating label');
+                const ratingValue = document.getElementById('ratingValue');
+                
+                if (!ratingValue) return;
+                
+                // Update rating display when a star is clicked
+                starInputs.forEach(input => {
+                    input.addEventListener('change', function() {
+                        const selectedRating = parseInt(this.value);
+                        ratingValue.textContent = selectedRating + ' star' + (selectedRating > 1 ? 's' : '');
+                        
+                        // Update all stars visually - highlight selected star and all previous stars
+                        starLabels.forEach((label) => {
+                            const starIcon = label.querySelector('i');
+                            const labelRating = parseInt(label.getAttribute('data-rating'));
+                            if (labelRating <= selectedRating) {
+                                starIcon.style.color = '#ffd700';
+                                starIcon.style.textShadow = '0 0 15px rgba(255, 215, 0, 0.8)';
+                            } else {
+                                starIcon.style.color = 'rgba(255, 255, 255, 0.2)';
+                                starIcon.style.textShadow = 'none';
+                            }
+                            starIcon.style.transform = 'scale(1)';
+                        });
+                    });
+                });
+                
+                // Hover effect for better UX - highlight current star and all previous stars
+                starLabels.forEach((label, index) => {
+                    label.addEventListener('mouseenter', function() {
+                        const hoverRating = parseInt(this.getAttribute('data-rating'));
+                        starLabels.forEach((l, i) => {
+                            const starIcon = l.querySelector('i');
+                            const labelRating = parseInt(l.getAttribute('data-rating'));
+                            if (labelRating <= hoverRating) {
+                                starIcon.style.color = '#ffd700';
+                                starIcon.style.transform = 'scale(1.1)';
+                                starIcon.style.textShadow = '0 0 10px rgba(255, 215, 0, 0.5)';
+                            } else {
+                                starIcon.style.color = 'rgba(255, 255, 255, 0.2)';
+                                starIcon.style.transform = 'scale(1)';
+                                starIcon.style.textShadow = 'none';
+                            }
+                        });
+                    });
+                    
+                    label.addEventListener('mouseleave', function() {
+                        const checkedInput = document.querySelector('.star-rating input[type="radio"]:checked');
+                        const currentRating = checkedInput ? parseInt(checkedInput.value) : 0;
+                        
+                        starLabels.forEach((l, i) => {
+                            const starIcon = l.querySelector('i');
+                            const labelRating = parseInt(l.getAttribute('data-rating'));
+                            if (currentRating > 0 && labelRating <= currentRating) {
+                                starIcon.style.color = '#ffd700';
+                                starIcon.style.textShadow = '0 0 15px rgba(255, 215, 0, 0.8)';
+                            } else {
+                                starIcon.style.color = 'rgba(255, 255, 255, 0.2)';
+                                starIcon.style.textShadow = 'none';
+                            }
+                            starIcon.style.transform = 'scale(1)';
+                        });
+                    });
+                });
+                
+                // Initialize - no stars selected by default
+                // All stars will remain dimmed until user selects one
+            }
 
             // Smooth Scroll with offset for fixed header
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
