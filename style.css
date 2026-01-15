@@ -2667,3 +2667,145 @@ nav ul .fa-circle-xmark {
         height: 200px;
     }
 }
+
+/* ==================== INTERACTIVE FEATURES ==================== */
+
+/* Clickable Contact Info with Copy Functionality */
+.clickable-contact {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.clickable-contact .copy-icon {
+    margin-left: 10px;
+    font-size: 14px;
+    opacity: 0.6;
+    transition: var(--transition);
+    color: var(--primary-color);
+}
+
+.clickable-contact:hover .copy-icon {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.clickable-contact .copy-feedback {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    white-space: nowrap;
+    box-shadow: 0 5px 15px rgba(255, 0, 79, 0.4);
+    z-index: 1000;
+}
+
+.clickable-contact .copy-feedback::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--primary-color);
+}
+
+/* Share Portfolio Section */
+.share-portfolio {
+    margin-top: 30px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.share-portfolio h4 {
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Poppins', sans-serif;
+}
+
+.share-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 79, 0.3);
+}
+
+.share-btn i {
+    font-size: 16px;
+}
+
+.share-btn:nth-child(1):hover {
+    background: #0077b5; /* LinkedIn color */
+    border-color: #0077b5;
+}
+
+.share-btn:nth-child(2):hover {
+    background: #1DA1F2; /* Twitter color */
+    border-color: #1DA1F2;
+}
+
+.share-btn:nth-child(3):hover {
+    background: #25D366; /* WhatsApp color */
+    border-color: #25D366;
+}
+
+.share-btn:nth-child(4):hover {
+    background: #EA4335; /* Gmail/Email color */
+    border-color: #EA4335;
+}
+
+/* Responsive Share Buttons */
+@media (max-width: 768px) {
+    .share-buttons {
+        flex-direction: column;
+    }
+    
+    .share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .clickable-contact .copy-feedback {
+        top: -40px;
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+}
